@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: challenge
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/lightit-challenge
+    username: root
+    password: 232323
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

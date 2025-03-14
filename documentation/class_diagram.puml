@@ -1,0 +1,56 @@
+@startuml class_diagram
+
+class User {
+    - name: string
+    - email: string
+    - created_at: datetime
+    - updated_at: datetime
+    - address: Address
+}
+User --> Address
+
+class Address {
+    - street: string
+    - number: string
+    - city: string
+    - state: string
+    - country: string
+}
+
+class NotificationService {
+    + send(user: User, data: Map<string, string>, notificationStrategy: string): void
+}
+NotificationService ..> NotificationStrategy
+
+interface NotificationStrategy {
+    + send(user: User, data: Map<String, String>): void
+}
+NotificationStrategy <|-- EmailNotificationStrategy
+NotificationStrategy <|-- SmsNotificationStrategy
+
+class EmailNotificationStrategy {
+    - adapter: EmailNotificationService
+    + send(user: User, data: Map<String, String>): void
+}
+EmailNotificationStrategy --> EmailNotificationService
+
+class GmailAdapter {
+    + send(email: string, subject: string, message: string): void
+}
+GmailAdapter --|> EmailNotificationService
+
+interface EmailNotificationService {
+    + send(email: string, subject: string, message: string): void
+}
+
+class SmsNotificationStrategy {
+    - adapter: SmsNotificationService
+    + send(user: User, data: Map<string, string>): void
+}
+SmsNotificationStrategy --> SmsNotificationService
+
+interface SmsNotificationService {
+    + send(phoneNumber: string, message: string): void
+}
+
+@enduml
