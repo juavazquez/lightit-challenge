@@ -19,28 +19,35 @@ class Address {
 
 class NotificationService {
     + send(user: User, data: Map<string, string>, notificationStrategy: string): void
+    - getStrategy(NotificationStrategyEnum strategy): INotificationStrategy
 }
-NotificationService ..> NotificationStrategy
+NotificationService ..> INotificationStrategy
+NotificationService ..> NotificationStrategyEnum
 
-interface NotificationStrategy {
+enum NotificationStrategyEnum {
+    EMAIL
+    SMS
+}
+
+interface INotificationStrategy {
     + send(user: User, data: Map<String, String>): void
 }
-NotificationStrategy <|-- EmailNotificationStrategy
-NotificationStrategy <|-- SmsNotificationStrategy
+INotificationStrategy <|-- EmailNotificationStrategy
+INotificationStrategy <|-- SmsNotificationStrategy
 
 class EmailNotificationStrategy {
-    - adapter: EmailNotificationService
+    - adapter: IEmailNotificationService
     + send(user: User, data: Map<String, String>): void
 }
-EmailNotificationStrategy --> EmailNotificationService
+EmailNotificationStrategy --> IEmailNotificationService
 
-class GmailAdapter {
-    + send(email: string, subject: string, message: string): void
+class JavaMailSenderAdapter {
+    + send(email: string, subject: string, body: string): void
 }
-GmailAdapter --|> EmailNotificationService
+JavaMailSenderAdapter --|> IEmailNotificationService
 
-interface EmailNotificationService {
-    + send(email: string, subject: string, message: string): void
+interface IEmailNotificationService {
+    + send(email: string, subject: string, body: string): void
 }
 
 class SmsNotificationStrategy {
@@ -52,5 +59,21 @@ SmsNotificationStrategy --> SmsNotificationService
 interface SmsNotificationService {
     + send(phoneNumber: string, message: string): void
 }
+
+class StorageService {
+    - adapter: StorageAdapter
+    + store(file: MultipartFile): string
+}
+StorageService --> StorageAdapter
+
+interface StorageAdapter {
+    + store(file: File): string
+}
+
+class CloudinaryAdapter {
+    + store(file: File): string
+}
+CloudinaryAdapter --|> StorageAdapter
+
 
 @enduml

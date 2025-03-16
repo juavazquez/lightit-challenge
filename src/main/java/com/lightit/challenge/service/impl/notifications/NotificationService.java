@@ -13,7 +13,7 @@ import com.lightit.challenge.service.notifications.INotificationService;
 import com.lightit.challenge.service.notifications.INotificationStrategy;
 
 @Service
-public class NotificationService implements INotificationService { // TODO make it async
+public class NotificationService implements INotificationService {
 
     // Create a map of INotificationStrategy objects with the key being
     // the value of the Qualifier annotation of the class
@@ -28,15 +28,19 @@ public class NotificationService implements INotificationService { // TODO make 
     }
 
     @Override
-    public void send(User user, Map<String, String> data, String strategy) {
+    public void send(User user, Map<String, String> data, NotificationStrategy strategy) {
         INotificationStrategy notificationStrategy = getStrategy(strategy);
         notificationStrategy.send(user, data);
     }
 
-    private INotificationStrategy getStrategy(String strategy) {
+    private INotificationStrategy getStrategy(NotificationStrategy strategy) {
         return Optional.ofNullable(strategy)
-                .map(strategies::get)
+                .map(s -> strategies.get(s.name()))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid strategy"));
     }
 
+    public enum NotificationStrategy {
+        EMAIL
+        // SMS
+    }
 }

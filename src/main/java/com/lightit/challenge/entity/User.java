@@ -16,11 +16,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -29,9 +35,12 @@ public class User {
     @Column(name = "id", nullable = false, unique = true)
     private UUID id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
-    
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -40,7 +49,7 @@ public class User {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime createdAt;
-    
+
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -50,5 +59,7 @@ public class User {
     @Embedded
     private Address address;
 
-    //TODO add role
+    @Column(name = "document_upload_successful")
+    private Boolean documentUploadSuccessful;
+
 }
