@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Address {
 
-    // Saved Everything as String to make it easier
+    // Saved Everything as String to make it simple
     // normally i would create a separate class for city, state and country
     // with connections to each other (city -> state -> country)
 

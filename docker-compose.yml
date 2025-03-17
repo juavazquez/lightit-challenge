@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: challenge-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: challenge
+      MYSQL_DATABASE: lightit-challenge
+      MYSQL_USER: root
+      MYSQL_PASSWORD: challenge
+    ports:
+      - "3306:3306"
+    volumes:
+      - challenge:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: challenge-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/lightit-challenge
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: challenge
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"

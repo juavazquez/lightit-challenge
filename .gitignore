@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Application Properties ###
-**/application-dev.yml
-**/application-prod.yml
+**/application-dev.properties
+**/application-beta.properties

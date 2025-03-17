@@ -1,19 +1,14 @@
 package com.lightit.challenge.service.impl.notifications.strategy.email;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.lightit.challenge.service.notifications.IEmailNotificationAdapter;
 
-import jakarta.mail.internet.MimeMessage;
-
 @Service
 public class JavaMailSenderAdapter implements IEmailNotificationAdapter {
 
-    @Value("${spring.mail.username}")
-    private String sender;
     private final JavaMailSender mailSender;
 
     public JavaMailSenderAdapter(JavaMailSender mailSender) {
@@ -22,13 +17,11 @@ public class JavaMailSenderAdapter implements IEmailNotificationAdapter {
 
     @Override
     public void send(String email, String subject, String body) throws Exception {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+        SimpleMailMessage message = new SimpleMailMessage();
 
-        helper.setTo(email);
-        helper.setSubject(subject);
-        helper.setText(body, true);
-        helper.setFrom(sender);
+        message.setTo(email);
+        message.setSubject(subject);
+        message.setText(body);
 
         mailSender.send(message);
     }

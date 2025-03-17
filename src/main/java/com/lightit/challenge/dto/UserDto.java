@@ -2,47 +2,46 @@ package com.lightit.challenge.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.lightit.challenge.validator.FileTypeValidator;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
 
-    @NotEmpty(message = "Email is required")
+    @NotBlank(message = "Email is required")
     @Email(message = "Email is invalid")
     private String email;
 
-    @NotEmpty(message = "First name is required")
-    @JsonProperty("first_name")
+    @NotBlank(message = "First name is required")
     private String firstName;
 
-    @NotEmpty(message = "Last name is required")
-    @JsonProperty("last_name")
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @NotEmpty(message = "Street line is required")
-    @JsonProperty("street_line")
+    @NotBlank(message = "Street line is required")
     private String streetLine;
 
-    @NotEmpty(message = "City is required")
+    @NotBlank(message = "City is required")
     private String city;
 
-    @NotEmpty(message = "State is required")
+    @NotBlank(message = "State is required")
     private String state;
 
-    @NotEmpty(message = "Country is required")
+    @NotBlank(message = "Country is required")
     private String country;
 
-    @NotNull(message = "Patient image is required")
-    @JsonProperty("document_img")
-    private MultipartFile documentImg; // TODO validation for types (.jpg .jpeg . png only)
+    @NotNull(message = "Document image is required")
+    @FileTypeValidator(allowedTypes = { "image/jpeg", "image/jpg", "image/png" })
+    private MultipartFile documentImg;
 
 }

@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class SecretTokenFilter extends OncePerRequestFilter {
 
-    @Value("${secret-token}")
+    @Value("${app.auth.key}")
     private String secretToken;
 
     @Override
@@ -33,6 +33,7 @@ public class SecretTokenFilter extends OncePerRequestFilter {
 
         if (secretToken.equals(token)) {
             filterChain.doFilter(request, response);
+            System.out.println("Token is correct");
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }

@@ -1,14 +1,9 @@
 package com.lightit.challenge.controller.exceptions;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -27,23 +22,6 @@ public class ApplicationExceptionHandler {
     logger.info("Bad Request: " + e.getMessage());
     return ResponseGenerator.generateResponseError(
         HttpStatus.BAD_REQUEST, "Bad Request", e.getMessage());
-  }
-
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<?> handleBadRequest(MethodArgumentNotValidException e) {
-    logger.info("Bad Request: " + e.getMessage());
-    Map<String, String> errors = new HashMap<>();
-
-    e.getBindingResult()
-        .getAllErrors()
-        .forEach(
-            (error) -> {
-              String fieldName = ((FieldError) error).getField();
-              String errorMessage = error.getDefaultMessage();
-              errors.put(fieldName, errorMessage);
-            });
-
-    return ResponseGenerator.generateResponseError(HttpStatus.BAD_REQUEST, "Bad Request", errors);
   }
 
   @ExceptionHandler(EntityExistsException.class)

@@ -30,6 +30,7 @@ enum NotificationStrategyEnum {
 }
 
 interface INotificationStrategy {
+    + getStrategy(): NotificationStrategyEnum
     + send(user: User, data: Map<String, String>): void
 }
 INotificationStrategy <|-- EmailNotificationStrategy
@@ -60,9 +61,15 @@ interface SmsNotificationService {
     + send(phoneNumber: string, message: string): void
 }
 
+class DocumentUploadService {
+    - storageService: StorageService
+    + upload(file: MultipartFile): string
+}
+DocumentUploadService --> StorageService
+
 class StorageService {
     - adapter: StorageAdapter
-    + store(file: MultipartFile): string
+    + store(file: File): string
 }
 StorageService --> StorageAdapter
 

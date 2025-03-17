@@ -2,10 +2,7 @@ package com.lightit.challenge.service.impl.notifications;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.lightit.challenge.entity.User;
@@ -17,14 +14,10 @@ public class NotificationService implements INotificationService {
 
     // Create a map of INotificationStrategy objects with the key being
     // the value of the Qualifier annotation of the class
-    private final Map<String, INotificationStrategy> strategies;
+    private final List<INotificationStrategy> strategies;
 
     public NotificationService(List<INotificationStrategy> strategies) {
-        this.strategies = strategies.stream()
-                .collect(
-                        Collectors.toMap(
-                                strategy -> strategy.getClass().getAnnotation(Qualifier.class).value(),
-                                strategy -> strategy));
+        this.strategies = strategies;
     }
 
     @Override
@@ -34,9 +27,10 @@ public class NotificationService implements INotificationService {
     }
 
     private INotificationStrategy getStrategy(NotificationStrategy strategy) {
-        return Optional.ofNullable(strategy)
-                .map(s -> strategies.get(s.name()))
-                .orElseThrow(() -> new IllegalArgumentException("Invalid strategy"));
+        return strategies.stream()
+                .filter(s -> s.getStrategy() == strategy)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid notification strategy"));
     }
 
     public enum NotificationStrategy {
