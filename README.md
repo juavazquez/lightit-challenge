@@ -11,7 +11,7 @@
 
 #### 1. Run app locally
 
-Add the properties file in the `/src/main/resources` and name it `application-beta.properties`.
+Place the provided properties file in the `/src/main/resources`. It should be named `application-beta.properties`.
 
 Run the following command to create the development environment using docker.
 
@@ -67,7 +67,7 @@ To run a successful request, run:
 sh successful_request.sh
 ```
 
-The successful request will save the user data to the database, store the document in cloudinary and send an asyncronous email to the user.
+The successful request will save the user data to the database, store the document in cloudinary and send an asynchronous email to the user.
 
 ## Documentation
 
