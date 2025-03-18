@@ -1,36 +1,39 @@
 @startuml class_diagram
 
 class User {
-    - name: string
-    - email: string
+    - id: UUID
+    - email: String
+    - firstName: String
+    - lastName: String
+    - phoneNumber: String
     - created_at: datetime
     - updated_at: datetime
     - address: Address
+    - documentUploadSuccessful: boolean
 }
 User --> Address
 
 class Address {
-    - street: string
-    - number: string
-    - city: string
-    - state: string
-    - country: string
+    - streetLine: String
+    - city: String
+    - state: String
+    - country: String
 }
 
 class NotificationService {
-    + send(user: User, data: Map<string, string>, notificationStrategy: string): void
-    - getStrategy(NotificationStrategyEnum strategy): INotificationStrategy
+    + send(user: User, data: Map<String, String>, notificationStrategy: NotificationStrategy): void
+    - getStrategy(NotificationStrategy strategy): INotificationStrategy
 }
 NotificationService ..> INotificationStrategy
-NotificationService ..> NotificationStrategyEnum
+NotificationService ..> NotificationStrategy
 
-enum NotificationStrategyEnum {
+enum NotificationStrategy {
     EMAIL
     SMS
 }
 
 interface INotificationStrategy {
-    + getStrategy(): NotificationStrategyEnum
+    + getStrategy(): NotificationStrategy
     + send(user: User, data: Map<String, String>): void
 }
 INotificationStrategy <|-- EmailNotificationStrategy
@@ -38,49 +41,56 @@ INotificationStrategy <|-- SmsNotificationStrategy
 
 class EmailNotificationStrategy {
     - adapter: IEmailNotificationService
+    + getStrategy(): NotificationStrategy
     + send(user: User, data: Map<String, String>): void
 }
-EmailNotificationStrategy --> IEmailNotificationService
+EmailNotificationStrategy --> IEmailNotificationAdapter
 
 class JavaMailSenderAdapter {
-    + send(email: string, subject: string, body: string): void
+    + send(email: String, subject: String, body: String): void
 }
-JavaMailSenderAdapter --|> IEmailNotificationService
+JavaMailSenderAdapter --|> IEmailNotificationAdapter
 
-interface IEmailNotificationService {
-    + send(email: string, subject: string, body: string): void
+interface IEmailNotificationAdapter{
+    + send(email: String, subject: String, body: String): void
 }
 
 class SmsNotificationStrategy {
     - adapter: SmsNotificationService
-    + send(user: User, data: Map<string, string>): void
+    + getStrategy(): NotificationStrategy
+    + send(user: User, data: Map<String, String>): void
 }
-SmsNotificationStrategy --> SmsNotificationService
+SmsNotificationStrategy --> ISmsNotificationService
 
-interface SmsNotificationService {
-    + send(phoneNumber: string, message: string): void
+interface ISmsNotificationService {
+    + send(phoneNumber: String, message: String): void
 }
 
 class DocumentUploadService {
-    - storageService: StorageService
-    + upload(file: MultipartFile): string
+    - storageService: IStorageService
+    + upload(file: MultipartFile, String userId): boolean
 }
-DocumentUploadService --> StorageService
+DocumentUploadService --> IStorageService
+
+interface IStorageService {
+    + store(file: File, String dir): boolean
+}
 
 class StorageService {
-    - adapter: StorageAdapter
-    + store(file: File): string
+    - adapter: IStorageAdapter
+    + store(file: File, String dir): boolean
 }
-StorageService --> StorageAdapter
+StorageService --> IStorageAdapter
+StorageService --|> IStorageService
 
-interface StorageAdapter {
-    + store(file: File): string
+interface IStorageAdapter {
+    + store(file: File, String dir): boolean
 }
 
 class CloudinaryAdapter {
-    + store(file: File): string
+    + store(file: File, String dir): boolean
 }
-CloudinaryAdapter --|> StorageAdapter
+CloudinaryAdapter --|> IStorageAdapter
 
 
 @enduml

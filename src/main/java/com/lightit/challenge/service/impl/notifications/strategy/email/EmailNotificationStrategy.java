@@ -35,6 +35,7 @@ public class EmailNotificationStrategy implements INotificationStrategy {
             emailNotificationAdapter.send(user.getEmail(), data.get("subject"), data.get("body"));
         } catch (Exception e) {
             logger.error("Error sending email notification", e);
+            // Add retry logic here
         }
         logger.info("Email notification sent successfully to user {}", user.getEmail());
     }

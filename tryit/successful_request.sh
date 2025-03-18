@@ -6,6 +6,7 @@ curl -X POST "http://localhost:8080/api/users" \
     -F "email=example@email.com" \
     -F "firstName=John" \
     -F "lastName=Doe" \
+    -F "phoneNumber=+541234567890" \
     -F "streetLine=Calle 123" \
     -F "city=CABA" \
     -F "state=Buenos Aires" \

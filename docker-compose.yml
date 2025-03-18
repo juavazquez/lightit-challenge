@@ -1,18 +1,22 @@
-version: "3.8"
-
 services:
   mysql:
     image: mysql:8
     container_name: challenge-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: challenge
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: lightit-challenge
-      MYSQL_USER: root
+      MYSQL_USER: challenge_user
       MYSQL_PASSWORD: challenge
     ports:
       - "3306:3306"
     volumes:
-      - challenge:/var/lib/mysql
+      - challenge_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
   app:
     build:
@@ -21,9 +25,13 @@ services:
     container_name: challenge-app
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/lightit-challenge
-      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_USERNAME: challenge_user
       SPRING_DATASOURCE_PASSWORD: challenge
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     ports:
       - "8080:8080"
+
+volumes:
+  challenge_data:

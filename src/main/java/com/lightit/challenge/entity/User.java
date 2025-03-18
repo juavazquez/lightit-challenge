@@ -44,6 +44,9 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber; // TODO: Add validation y add to dto
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

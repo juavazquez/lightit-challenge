@@ -6,9 +6,9 @@ curl -X POST "http://localhost:8080/api/users" \
     -F "email=example@email.com" \
     -F "firstName=John" \
     -F "lastName=Doe" \
-    -F "phoneNumber=+541234567890" \
+    -F "phoneNumber=+123sdad4234jh34jh" \
     -F "streetLine=Calle 123" \
     -F "city=CABA" \
     -F "state=Buenos Aires" \
     -F "country=Argentina" \
-    -F "documentImg=@files/mclovin_document.pdf"
+    -F "documentImg=@files/mclovin_document.jpg"

@@ -5,17 +5,17 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.lightit.challenge.validator.FileTypeValidator;
+import com.lightit.challenge.validator.ValidFileType;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class FileTypeValidatorImpl implements ConstraintValidator<FileTypeValidator, MultipartFile> {
+public class FileTypeValidator implements ConstraintValidator<ValidFileType, MultipartFile> {
 
     private List<String> allowedTypes;
 
     @Override
-    public void initialize(FileTypeValidator constraintAnnotation) {
+    public void initialize(ValidFileType constraintAnnotation) {
         // Initialize allowed file extensions from the annotation
         allowedTypes = Arrays.asList(constraintAnnotation.allowedTypes());
     }

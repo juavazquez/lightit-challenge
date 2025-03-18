@@ -50,6 +50,7 @@ public class UserService implements IUserService {
                 userDto.getEmail(),
                 userDto.getFirstName(),
                 userDto.getLastName(),
+                userDto.getPhoneNumber(),
                 now,
                 now,
                 address,
