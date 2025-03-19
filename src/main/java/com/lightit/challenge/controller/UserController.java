@@ -2,20 +2,30 @@ package com.lightit.challenge.controller;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lightit.challenge.controller.exceptions.BindingResultException;
+import com.lightit.challenge.controller.response.CustomError;
 import com.lightit.challenge.controller.response.ResponseGenerator;
-import com.lightit.challenge.dto.UserDto;
+import com.lightit.challenge.dto.UserInputDto;
+import com.lightit.challenge.dto.UserOutputDto;
 import com.lightit.challenge.service.IUserDataService;
+
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api") // TODO open api Authorization header
 public class UserController {
 
     private final IUserDataService userDataService;
@@ -24,23 +34,31 @@ public class UserController {
         this.userDataService = userDataService;
     }
 
-    @PostMapping(value = "/users", consumes = "multipart/form-data")
-    public ResponseEntity<?> postMethodName(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult) {
+    @PostMapping(value = "/users", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = CustomError.class)) })
+    })
+    public ResponseEntity<?> postMethodName(@Valid @ModelAttribute UserInputDto userDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return handleValidationErrors(bindingResult);
+            throw new BindingResultException(bindingResult);
         }
 
         userDataService.register(userDto);
         return ResponseGenerator.generateResponseOK("User registered successfully");
     }
 
-    private ResponseEntity<?> handleValidationErrors(BindingResult bindingResult) {
-        StringBuilder errorMessage = new StringBuilder("");
-        bindingResult.getAllErrors().forEach(error -> {
-            errorMessage.append(error.getDefaultMessage()).append("; ");
-        });
-        return ResponseGenerator.generateResponseError(HttpStatus.BAD_REQUEST, "Bad Request",
-                errorMessage.toString());
+    @GetMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UserOutputDto.class)) }),
+            @ApiResponse(responseCode = "404", description = "Not Found", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = CustomError.class)) }) })
+    public ResponseEntity<UserOutputDto> getMethodName(@RequestParam(required = true) String email) {
+
+        return ResponseGenerator.generateResponseOK(userDataService.getUser(email));
     }
+
 }

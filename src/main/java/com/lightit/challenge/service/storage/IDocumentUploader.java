@@ -6,4 +6,6 @@ public interface IDocumentUploader {
 
     boolean upload(MultipartFile file, String userId);
 
+    String retrieve(String userId);
+
 }

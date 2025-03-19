@@ -1,14 +1,19 @@
 package com.lightit.challenge.service.impl.storage;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 import com.lightit.challenge.service.storage.IStorageAdapter;
 
@@ -49,6 +54,20 @@ public class CloudinaryStorageAdapter implements IStorageAdapter {
         } catch (Exception e) {
             logger.error("Failed to upload document -> " + file.getName(), e);
             return false;
+        }
+    }
+
+    @Override
+    public String retrieve(String filename) {
+        try {
+            logger.info("Retrieving document from Cloudinary -> " + filename);
+            ApiResponse apiResponse = cloudinary.api().resource(filename, ObjectUtils.emptyMap());
+
+            // Get the secure URL of the file
+            return apiResponse.get("secure_url").toString();
+        } catch (Exception e) {
+            logger.error("Failed to retrieve document -> " + filename, e);
+            return null;
         }
     }
 

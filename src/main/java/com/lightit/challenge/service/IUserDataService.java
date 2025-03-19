@@ -1,9 +1,12 @@
 package com.lightit.challenge.service;
 
-import com.lightit.challenge.dto.UserDto;
+import com.lightit.challenge.dto.UserInputDto;
+import com.lightit.challenge.dto.UserOutputDto;
 
 public interface IUserDataService {
 
-    void register(UserDto userDto);
+    void register(UserInputDto userDto);
+
+    UserOutputDto getUser(String email);
 
 }

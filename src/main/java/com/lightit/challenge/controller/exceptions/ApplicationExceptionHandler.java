@@ -11,13 +11,14 @@ import com.lightit.challenge.controller.response.CustomError;
 import com.lightit.challenge.controller.response.ResponseGenerator;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
   private final Logger logger = LoggerFactory.getLogger(ApplicationExceptionHandler.class);
 
-  @ExceptionHandler(IllegalArgumentException.class)
+  @ExceptionHandler({ IllegalArgumentException.class, BindingResultException.class })
   public ResponseEntity<CustomError> handleBadRequest(Exception e) {
     logger.info("Bad Request: " + e.getMessage());
     return ResponseGenerator.generateResponseError(
@@ -28,6 +29,12 @@ public class ApplicationExceptionHandler {
   public ResponseEntity<CustomError> handleConflict(Exception e) {
     logger.error("Conflict: " + e.getMessage());
     return ResponseGenerator.generateResponseError(HttpStatus.CONFLICT, "Conflict", e.getMessage());
+  }
+
+  @ExceptionHandler(EntityNotFoundException.class)
+  public ResponseEntity<CustomError> handleNotFound(Exception e) {
+    logger.error("Not Found: " + e.getMessage());
+    return ResponseGenerator.generateResponseError(HttpStatus.NOT_FOUND, "Not Found", e.getMessage());
   }
 
   @ExceptionHandler({ RuntimeException.class, Exception.class })

@@ -20,4 +20,9 @@ public class StorageService implements IStorageService {
         return storageAdapter.store(file, dir);
     }
 
+    @Override
+    public String retrieve(String filename) {
+        return storageAdapter.retrieve(filename);
+    }
+
 }

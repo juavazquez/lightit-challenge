@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,8 +41,14 @@ public class DocumentUploader implements IDocumentUploader {
         String postfix = "." + contentType.split("/")[1];
 
         try {
-            // ask JVM to ask operating system to create temp file
-            File tempFile = File.createTempFile(filename, postfix);
+            File tempFile = new File(System.getProperty("java.io.tmpdir"), filename + postfix);
+
+            // Ensure the file does not already exist
+            if (tempFile.exists()) {
+                tempFile.delete(); // Delete if it exists
+            }
+
+            tempFile.createNewFile(); // Explicitly create the file
 
             // ask JVM to delete it upon JVM exit if you forgot / can't delete due exception
             tempFile.deleteOnExit();
@@ -60,6 +67,11 @@ public class DocumentUploader implements IDocumentUploader {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String retrieve(String userId) {
+        return storageService.retrieve(FILENAME_PREFIX + userId);
     }
 
 }

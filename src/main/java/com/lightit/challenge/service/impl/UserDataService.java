@@ -5,13 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.lightit.challenge.builder.EmailBuilder;
-import com.lightit.challenge.dto.UserDto;
+import com.lightit.challenge.dto.UserInputDto;
+import com.lightit.challenge.dto.UserOutputDto;
 import com.lightit.challenge.entity.User;
+import com.lightit.challenge.mapper.UserMapper;
 import com.lightit.challenge.service.IUserDataService;
 import com.lightit.challenge.service.IUserService;
 import com.lightit.challenge.service.impl.notifications.NotificationService.NotificationStrategy;
 import com.lightit.challenge.service.notifications.INotificationService;
 import com.lightit.challenge.service.storage.IDocumentUploader;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserDataService implements IUserDataService {
@@ -32,7 +36,7 @@ public class UserDataService implements IUserDataService {
     }
 
     @Override
-    public void register(UserDto userDto) {
+    public void register(UserInputDto userDto) {
         // Save user to database
         logger.info("Saving user {} to database", userDto.getEmail());
         User user = userService.save(userDto);
@@ -53,6 +57,17 @@ public class UserDataService implements IUserDataService {
                 user,
                 EmailBuilder.buildWelcomeEmail(user.getFirstName()),
                 NotificationStrategy.EMAIL);
+    }
+
+    @Override
+    public UserOutputDto getUser(String email) {
+        User user = userService.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        UserMapper mapper = new UserMapper();
+        return new UserOutputDto(
+                mapper.toDto(user),
+                documentUploader.retrieve(user.getId().toString()));
     }
 
 }

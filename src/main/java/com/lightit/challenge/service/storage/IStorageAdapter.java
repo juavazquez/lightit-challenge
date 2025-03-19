@@ -6,4 +6,6 @@ public interface IStorageAdapter {
 
     boolean store(File file, String dir);
 
+    String retrieve(String filename);
+
 }

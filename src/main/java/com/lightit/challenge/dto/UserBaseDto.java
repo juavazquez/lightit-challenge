@@ -1,13 +1,9 @@
 package com.lightit.challenge.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
-import com.lightit.challenge.validator.ValidFileType;
 import com.lightit.challenge.validator.ValidPhoneNumber;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserBaseDto {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email is invalid")
@@ -44,9 +40,5 @@ public class UserDto {
 
     @NotBlank(message = "Country is required")
     private String country;
-
-    @NotNull(message = "Document image is required")
-    @ValidFileType(allowedTypes = { "image/jpeg", "image/jpg", "image/png" })
-    private MultipartFile documentImg;
 
 }
