@@ -1,9 +1,19 @@
 package com.lightit.challenge.controller;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lightit.challenge.TestSecurityConfig;
+import com.lightit.challenge.config.filters.SecretTokenFilter;
+import com.lightit.challenge.dto.UserOutputDto;
+import com.lightit.challenge.service.IUserDataService;
+
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,14 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lightit.challenge.TestSecurityConfig;
-import com.lightit.challenge.config.filters.SecretTokenFilter;
-import com.lightit.challenge.dto.UserOutputDto;
-import com.lightit.challenge.service.impl.UserDataService;
-
-import jakarta.persistence.EntityNotFoundException;
-
 @WebMvcTest(controllers = UserController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecretTokenFilter.class))
 @Import(TestSecurityConfig.class)
 public class UserControllerTest {
@@ -35,32 +37,34 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    UserDataService userDataService;
+    IUserDataService userDataService;
 
     private final String email = "example@email.com";
 
     @Test
     public void userRegistrationTest_OK() throws Exception {
         mockMvc
-                .perform(MockMvcRequestBuilders.multipart("/api/users")
-                        .file(new MockMultipartFile("documentImg", "test.jpg", "image/jpeg", new byte[] { 1, 2, 3, 4 }))
-                        .param("email", "test@example.com")
-                        .param("firstName", "John")
-                        .param("lastName", "Doe")
-                        .param("phoneNumber", "1234567890")
-                        .param("streetLine", "123 Main St")
-                        .param("city", "Anytown")
-                        .param("state", "Anystate")
-                        .param("country", "Anycountry")
-                        .contentType("multipart/form-data"))
+                .perform(
+                        MockMvcRequestBuilders.multipart("/api/users")
+                                .file(
+                                        new MockMultipartFile(
+                                                "documentImg", "test.jpg", "image/jpeg", new byte[] { 1, 2, 3, 4 }))
+                                .param("email", "test@example.com")
+                                .param("firstName", "John")
+                                .param("lastName", "Doe")
+                                .param("phoneNumber", "1234567890")
+                                .param("streetLine", "123 Main St")
+                                .param("city", "Anytown")
+                                .param("state", "Anystate")
+                                .param("country", "Anycountry")
+                                .contentType("multipart/form-data"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     public void userRegistrationTest_BadRequest() throws Exception {
         mockMvc
-                .perform(MockMvcRequestBuilders.multipart("/api/users")
-                        .contentType("multipart/form-data"))
+                .perform(MockMvcRequestBuilders.multipart("/api/users").contentType("multipart/form-data"))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
@@ -72,7 +76,29 @@ public class UserControllerTest {
         mockMvc
                 .perform(MockMvcRequestBuilders.get("/api/users?email={email}", email))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(userOutputDto)));
+                .andExpect(
+                        MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(userOutputDto)));
+    }
+
+    @Test
+    public void userRegistrationTest_Conflict() throws Exception {
+        doThrow(new EntityExistsException()).when(userDataService).register(any());
+        mockMvc
+                .perform(
+                        MockMvcRequestBuilders.multipart("/api/users")
+                                .file(
+                                        new MockMultipartFile(
+                                                "documentImg", "test.jpg", "image/jpeg", new byte[] { 1, 2, 3, 4 }))
+                                .param("email", "test@example.com")
+                                .param("firstName", "John")
+                                .param("lastName", "Doe")
+                                .param("phoneNumber", "1234567890")
+                                .param("streetLine", "123 Main St")
+                                .param("city", "Anytown")
+                                .param("state", "Anystate")
+                                .param("country", "Anycountry")
+                                .contentType("multipart/form-data"))
+                .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
     @Test

@@ -1,16 +1,14 @@
 package com.lightit.challenge.service;
 
-import java.util.Optional;
-
 import com.lightit.challenge.dto.UserInputDto;
 import com.lightit.challenge.entity.User;
+import java.util.Optional;
 
 public interface IUserService {
 
-    User save(UserInputDto userDto);
+  User save(UserInputDto userDto);
 
-    void setDocumentUploadSuccessful(User user);
+  User setDocumentUploadSuccessful(User user);
 
-    Optional<User> findByEmail(String email);
-
+  Optional<User> findByEmail(String email);
 }

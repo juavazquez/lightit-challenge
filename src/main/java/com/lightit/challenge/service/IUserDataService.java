@@ -5,8 +5,7 @@ import com.lightit.challenge.dto.UserOutputDto;
 
 public interface IUserDataService {
 
-    void register(UserInputDto userDto);
+  void register(UserInputDto userDto);
 
-    UserOutputDto getUser(String email);
-
+  UserOutputDto getUser(String email);
 }

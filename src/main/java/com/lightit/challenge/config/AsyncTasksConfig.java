@@ -10,18 +10,18 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 @Configuration
 @EnableAsync
 public class AsyncTasksConfig {
-    private final Logger logger = LoggerFactory.getLogger(AsyncTasksConfig.class);
+  private final Logger logger = LoggerFactory.getLogger(AsyncTasksConfig.class);
 
-    @Bean
-    public ThreadPoolTaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(2);
-        executor.setQueueCapacity(500);
-        executor.setThreadNamePrefix("AsyncThread-");
-        executor.setRejectedExecutionHandler(
-                (r, executor1) -> logger.warn("Task rejected, thread pool is full and queue is also full"));
-        executor.initialize();
-        return executor;
-    }
+  @Bean
+  public ThreadPoolTaskExecutor taskExecutor() {
+    ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setCorePoolSize(2);
+    executor.setMaxPoolSize(2);
+    executor.setQueueCapacity(500);
+    executor.setThreadNamePrefix("AsyncThread-");
+    executor.setRejectedExecutionHandler(
+        (r, executor1) -> logger.warn("Task rejected, thread pool is full and queue is also full"));
+    executor.initialize();
+    return executor;
+  }
 }

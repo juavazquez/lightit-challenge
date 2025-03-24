@@ -26,6 +26,22 @@
 		<tag/>
 		<url/>
 	</scm>
+
+	<profiles>
+		<profile>
+			<id>test</id>
+			<activation>
+				<property>
+					<name>spring.profiles.active</name>
+					<value>test</value>
+				</property>
+			</activation>
+			<properties>
+				<spring.profiles.active>test</spring.profiles.active>
+			</properties>
+		</profile>
+	</profiles>
+
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -103,7 +119,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
+				<version>0.8.12</version>
 				<executions>
 					<execution>
 						<goals>
@@ -117,7 +133,7 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
-					<!-- Validación de cobertura -->
+					<!-- Coverage Check -->
 					<execution>
 						<id>check</id>
 						<goals>
@@ -126,9 +142,6 @@
 						<configuration>
 							<rules>
 								<rule>
-									<excludes>
-										<exclude>com.tumo.app.config</exclude>
-									</excludes>
 									<element>BUNDLE</element>
 									<limits>
 										<limit>

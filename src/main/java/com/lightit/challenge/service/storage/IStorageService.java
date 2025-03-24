@@ -4,8 +4,7 @@ import java.io.File;
 
 public interface IStorageService {
 
-    boolean store(File file, String dir);
+  boolean store(File file, String dir);
 
-    String retrieve(String filename);
-
+  String retrieve(String filename);
 }

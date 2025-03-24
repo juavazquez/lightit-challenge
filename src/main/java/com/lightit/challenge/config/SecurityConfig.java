@@ -13,19 +13,21 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(
-                csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/api/**") // Disable CSRF for API routes
+  @Bean
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf(
+        csrf ->
+            csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .ignoringRequestMatchers("/api/**") // Disable CSRF for API routes
         );
-        return http.build();
-    }
+    return http.build();
+  }
 
-    @Bean
-    UserDetailsService emptyDetailsService() {
-        return username -> {
-            throw new UsernameNotFoundException("No local users, only secret token authentication is supported");
-        };
-    }
+  @Bean
+  UserDetailsService emptyDetailsService() {
+    return username -> {
+      throw new UsernameNotFoundException(
+          "No local users, only secret token authentication is supported");
+    };
+  }
 }

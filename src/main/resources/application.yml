@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: challenge
+  profiles:
+    active: dev
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /api-docs-ui
+  packages-to-scan: com.lightit.challenge.controller
+  pathsToMatch: /api/**

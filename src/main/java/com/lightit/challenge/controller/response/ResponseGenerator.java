@@ -5,19 +5,18 @@ import org.springframework.http.ResponseEntity;
 
 public class ResponseGenerator {
 
-    public static <T> ResponseEntity<T> generateResponseOK(T body) {
-        return new ResponseEntity<>(body, HttpStatus.OK);
-    }
+  public static <T> ResponseEntity<T> generateResponseOK(T body) {
+    return new ResponseEntity<>(body, HttpStatus.OK);
+  }
 
-    public static ResponseEntity<CustomError> generateResponseError(
-            HttpStatus status, String message, String detail) {
-        CustomError customError = new CustomError(message, detail);
-        return ResponseEntity.status(status).body(customError);
-    }
+  public static ResponseEntity<CustomError> generateResponseError(
+      HttpStatus status, String message, String detail) {
+    CustomError customError = new CustomError(message, detail);
+    return ResponseEntity.status(status).body(customError);
+  }
 
-    public static ResponseEntity<CustomError> generateResponseError(
-            HttpStatus status, String message) {
-        return generateResponseError(status, message, null);
-    }
-
+  public static ResponseEntity<CustomError> generateResponseError(
+      HttpStatus status, String message) {
+    return generateResponseError(status, message, null);
+  }
 }

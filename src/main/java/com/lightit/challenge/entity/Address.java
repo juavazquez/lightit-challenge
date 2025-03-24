@@ -14,19 +14,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Address {
 
-    // Saved Everything as String to make it simple
-    // normally i would create a separate class for city, state and country
-    // with connections to each other (city -> state -> country)
+  // Saved Everything as String to make it simple
+  // normally i would create a separate class for city, state and country
+  // with connections to each other (city -> state -> country)
 
-    @Column(name = "street_line")
-    private String streetLine;
+  @Column(name = "street_line")
+  private String streetLine;
 
-    @Column(name = "city")
-    private String city;
+  @Column(name = "city")
+  private String city;
 
-    @Column(name = "state")
-    private String state;
+  @Column(name = "state")
+  private String state;
 
-    @Column(name = "country")
-    private String country;
+  @Column(name = "country")
+  private String country;
 }

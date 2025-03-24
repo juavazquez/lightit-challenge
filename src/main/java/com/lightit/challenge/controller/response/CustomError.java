@@ -12,8 +12,9 @@ import lombok.Setter;
 @Setter
 @Schema(name = "Error Schema", description = "Error schema")
 public class CustomError {
-    @Schema(description = "error message", example = "error message")
-    private String message;
-    @Schema(description = "error details", example = "error details")
-    private String error;
+  @Schema(description = "error message", example = "error message")
+  private String message;
+
+  @Schema(description = "error details", example = "error details")
+  private String error;
 }

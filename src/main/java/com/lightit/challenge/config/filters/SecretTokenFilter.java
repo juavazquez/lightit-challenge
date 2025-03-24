@@ -1,52 +1,53 @@
 package com.lightit.challenge.config.filters;
 
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.lang.NonNull;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 public class SecretTokenFilter extends OncePerRequestFilter {
 
-    @Value("${app.auth.key}")
-    private String secretToken;
+  private String secretToken;
 
-    @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain)
-            throws ServletException, IOException {
+  public SecretTokenFilter(@Value("${app.auth.key}") String secretToken) {
+    this.secretToken = secretToken;
+  }
 
-        // Simple authorization token check for /api routes
+  @Override
+  protected void doFilterInternal(
+      @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
+      throws ServletException, IOException {
 
-        if (isApiRequest(request)) {
-            String token = request.getHeader("Authorization");
+    // Simple authorization token check for /api routes
 
-            if (token != null && token.startsWith("Bearer ")) {
-                token = token.substring(7);
-            }
+    if (isApiRequest(request)) {
+      String token = request.getHeader("Authorization");
 
-            if (secretToken.equals(token)) {
-                filterChain.doFilter(request, response);
-            } else {
-                throw new AccessDeniedException("Access denied");
-            }
-        } else {
-            filterChain.doFilter(request, response);
-        }
+      if (token != null && token.startsWith("Bearer ")) {
+        token = token.substring(7);
+      }
 
+      if (secretToken.equals(token)) {
+        filterChain.doFilter(request, response);
+      } else {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        return;
+      }
+    } else {
+      filterChain.doFilter(request, response);
     }
+  }
 
-    private boolean isApiRequest(HttpServletRequest request) {
-        return request.getRequestURI().startsWith("/api/");
-    }
-
+  private boolean isApiRequest(HttpServletRequest request) {
+    return request.getRequestURI().startsWith("/api/");
+  }
 }

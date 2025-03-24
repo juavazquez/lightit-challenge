@@ -4,8 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IDocumentUploader {
 
-    boolean upload(MultipartFile file, String userId);
+  boolean upload(MultipartFile file, String userId);
 
-    String retrieve(String userId);
-
+  String retrieve(String userId);
 }
