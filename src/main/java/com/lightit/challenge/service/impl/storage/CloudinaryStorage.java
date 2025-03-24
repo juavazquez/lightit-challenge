@@ -1,16 +1,12 @@
 package com.lightit.challenge.service.impl.storage;
 
 import java.io.File;
-import java.net.URI;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
@@ -20,9 +16,9 @@ import com.lightit.challenge.service.storage.IStorageAdapter;
 import jakarta.annotation.PostConstruct;
 
 @Service
-public class CloudinaryStorageAdapter implements IStorageAdapter {
+public class CloudinaryStorage implements IStorageAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(CloudinaryStorageAdapter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CloudinaryStorage.class);
 
     private Cloudinary cloudinary;
 
@@ -33,7 +29,7 @@ public class CloudinaryStorageAdapter implements IStorageAdapter {
     @Value("${cloudinary.api-secret}")
     private String API_SECRET;
 
-    public CloudinaryStorageAdapter() {
+    public CloudinaryStorage() {
     }
 
     @PostConstruct

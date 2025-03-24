@@ -10,11 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Schema(name = "Error Schema", description = "Error schema")
 public class CustomError {
-    @Schema(description = "status code", example = "int")
-    private Integer status;
-    @Schema(description = "error message")
+    @Schema(description = "error message", example = "error message")
     private String message;
-    @Schema(description = "error details")
+    @Schema(description = "error details", example = "error details")
     private String error;
 }

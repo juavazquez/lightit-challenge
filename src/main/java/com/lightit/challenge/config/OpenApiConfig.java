@@ -10,19 +10,19 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
 public class OpenApiConfig {
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("My API")
-                        .version("1.0")
-                        .description("API Documentation"))
-                .addSecurityItem(new SecurityRequirement().addList("Authorization-Header"))
-                .components(new io.swagger.v3.oas.models.Components()
-                        .addSecuritySchemes("Authorization-Header", new SecurityScheme()
-                                .name("Authorization")
-                                .type(SecurityScheme.Type.APIKEY)
-                                .in(SecurityScheme.In.HEADER)
-                                .description("Token for authentication")));
-    }
+        @Bean
+        public OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("My API")
+                                                .version("1.0")
+                                                .description("API Documentation"))
+                                .addSecurityItem(new SecurityRequirement().addList("Authorization Header"))
+                                .components(new io.swagger.v3.oas.models.Components()
+                                                .addSecuritySchemes("Authorization Header", new SecurityScheme()
+                                                                .name("Authorization")
+                                                                .type(SecurityScheme.Type.HTTP)
+                                                                .in(SecurityScheme.In.HEADER)
+                                                                .description("Token for authentication")));
+        }
 }

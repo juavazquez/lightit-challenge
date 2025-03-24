@@ -11,7 +11,7 @@ public class ResponseGenerator {
 
     public static ResponseEntity<CustomError> generateResponseError(
             HttpStatus status, String message, String detail) {
-        CustomError customError = new CustomError(status.value(), message, detail);
+        CustomError customError = new CustomError(message, detail);
         return ResponseEntity.status(status).body(customError);
     }
 

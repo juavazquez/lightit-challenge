@@ -71,6 +71,12 @@ The successful request will save the user data to the database, store the docume
 
 ## Documentation
 
+#### Endpoints
+
+You can find the endpoint documentation by running the project and visiting: `/api-docs-ui`
+
+#### Class Diagram
+
 You can find the class diagram image in the `/documentation` directory
 
 ![class diagram](documentation/class_diagram_img.png)
