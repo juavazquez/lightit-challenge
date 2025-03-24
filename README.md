@@ -11,7 +11,7 @@
 
 #### 1. Run app locally
 
-Place the provided properties file in the `/src/main/resources`. It should be named `application-beta.properties`.
+Place the provided properties file in the `/src/main/resources`. It should be named `application-beta.yml`.
 
 Run the following command to create the development environment using docker.
 
@@ -28,12 +28,12 @@ Third party services were used in this project. All of them can be accessed with
 ##### Mailtrap
 
 Mailtrap sandbox smtp server was used to simulate sending email notifications.
-Go to [mailtrap website](https://mailtrap.io/inboxes/3533850) and sign in using the provided google account. There you will be able to see the emails sent by the application.
+Go to [mailtrap website](https://mailtrap.io/inboxes/3553113/messages) and sign in using the provided google account. There you will be able to see the emails sent by the application.
 
 ##### Cloudinary
 
 Cloudinary was used to upload patients' document images, enhancing the application's scalability.
-Go to [cloudinary website](https://console.cloudinary.com/pm/c-1d87e8982cdd51515ada58a0c92a5a/media-explorer) and sign in using the provided google account. There you will be able to see the documents stored by the application.
+Go to [cloudinary website](https://console.cloudinary.com/pm/c-55a70327af319369799c00d253fdf6/media-explorer) and sign in using the provided google account. There you will be able to see the documents stored by the application.
 
 ## Try it
 
@@ -68,6 +68,14 @@ sh successful_request.sh
 ```
 
 The successful request will save the user data to the database, store the document in cloudinary and send an asynchronous email to the user.
+
+## Tests
+
+To run application tests, run the following command:
+
+```bash
+mvn test
+```
 
 ## Documentation
 
